@@ -30,14 +30,25 @@ header h1 {
 
 main {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 30px;
-  justify-content: center;
+  align-items: stretch;
 }
 
 @media (min-width: 768px) {
   main {
-    grid-template-columns: 2fr 1fr;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  #activities-container {
+    flex: 3 1 600px;
+  }
+
+  #signup-container {
+    flex: 1 1 300px;
+    max-width: 400px;
   }
 }
 
@@ -47,7 +58,6 @@ section {
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 500px;
 }
 
 section h3 {
@@ -55,6 +65,13 @@ section h3 {
   padding-bottom: 10px;
   border-bottom: 1px solid #ddd;
   color: #1a237e;
+}
+
+#activities-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  overflow-x: auto;
 }
 
 .activity-card {
@@ -65,6 +82,7 @@ section h3 {
   background: linear-gradient(180deg, #ffffff 0%, #f7f9ff 100%);
   box-shadow: 0 6px 16px rgba(26, 35, 126, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  break-inside: avoid;
 }
 
 .activity-card:hover {
@@ -105,19 +123,59 @@ section h3 {
   border-top: 1px dashed #cdd3ff;
 }
 
+.participants-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
 .participants-title {
   color: #1a237e;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 0;
+}
+
+.participants-toggle {
+  background: none;
+  border: none;
+  color: #1a237e;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.participants-toggle:hover {
+  background-color: #e8eaf6;
+}
+
+.participants-toggle svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  transition: transform 0.25s ease;
+}
+
+.participants-toggle.expanded svg {
+  transform: rotate(180deg);
 }
 
 .participants-list {
   list-style: none;
-  margin: 0;
+  margin: 8px 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.participants-list.hidden {
+  display: none;
 }
 
 .participant-item {

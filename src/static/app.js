@@ -52,8 +52,13 @@ document.addEventListener("DOMContentLoaded", () => {
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
           <div class="participants-section">
-            <p class="participants-title">Participants</p>
-            <ul class="participants-list"></ul>
+            <div class="participants-header" tabindex="0" role="button" aria-label="Toggle participants list">
+              <p class="participants-title">Participants (${details.participants.length})</p>
+              <button class="participants-toggle" aria-label="Toggle participants list" aria-expanded="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 10l5 5 5-5z"/></svg>
+              </button>
+            </div>
+            <ul class="participants-list hidden"></ul>
           </div>
         `;
 
@@ -87,6 +92,26 @@ document.addEventListener("DOMContentLoaded", () => {
             participantsList.appendChild(participantItem);
           });
         }
+
+        // Wire up participants toggle
+        const toggleBtn = activityCard.querySelector(".participants-toggle");
+        const participantsListEl = activityCard.querySelector(".participants-list");
+        const participantsHeader = activityCard.querySelector(".participants-header");
+        participantsListEl.setAttribute("aria-hidden", "true");
+        function handleToggle() {
+          const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+          toggleBtn.setAttribute("aria-expanded", String(!isExpanded));
+          toggleBtn.classList.toggle("expanded", !isExpanded);
+          participantsListEl.classList.toggle("hidden", isExpanded);
+          participantsListEl.setAttribute("aria-hidden", String(isExpanded));
+        }
+        participantsHeader.addEventListener("click", handleToggle);
+        participantsHeader.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleToggle();
+          }
+        });
 
         activitiesList.appendChild(activityCard);
 
